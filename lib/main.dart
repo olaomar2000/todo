@@ -1,36 +1,39 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/helpers/db_helper.dart';
 import 'package:todo/provider/todoprovider.dart';
+import 'package:todo/ui/pages/main_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DbHelper.dbHelper.initDatabase();
   runApp(ChangeNotifierProvider<TodoProvider>(
-    create: (context) => TodoProvider(),
-    child: MaterialApp(
-      home: MyApp(),
-    ),
-  ));
+      create: (context) => TodoProvider(),
+      child: MaterialApp(home: MainPage())));
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Text(Provider.of<TodoProvider>(context).testName),
-            ElevatedButton(
-              child: Text("Change provider"),
-              onPressed: () {
-                Provider.of<TodoProvider>(context, listen: false)
-                    .changeName('omar');
-               // print(Provider.of<TodoProvider>(context, listen: true).testName);
-              },
-            ),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            Provider.of<TodoProvider>(context).testName,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 25),
+          ),
+          ElevatedButton(
+            child: Text('Change Provider Value'),
+            onPressed: () {
+              Provider.of<TodoProvider>(context, listen: false)
+                  .changeTestName('Flutter Course');
+            },
+          ),
+        ],
       ),
     );
   }
